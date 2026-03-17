@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: Pipeline CI
 
 on:
   push:
@@ -11,18 +11,20 @@ env:
 
 jobs:
   lint:
-    name: Lint
+    name: Verificação (Lint)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: pip install ruff
-      - run: ruff check src/ tests/ && ruff format --check src/ tests/
+      - name: Instalar Ruff
+        run: pip install ruff
+      - name: Analisar código e formatação
+        run: ruff check src/ tests/ && ruff format --check src/ tests/
 
   test:
-    name: Test
+    name: Testes
     runs-on: ubuntu-latest
     needs: lint
     steps:
@@ -30,13 +32,15 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: pip install -r requirements.txt
-      - run: pytest tests/ -v --tb=short
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+      - name: Rodar testes
+        run: pytest tests/ -v --tb=short
         env:
           PYTHONPATH: ${{ github.workspace }}/src
 
   build:
-    name: Build
+    name: Compilação
     runs-on: ubuntu-latest
     needs: test
     steps:
@@ -44,5 +48,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: pip install -r requirements.txt
-      - run: python -c "from src.calculator import add; print(add(1,2))"
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+      - name: Validar import do módulo
+        run: python -c "from src.calculator import add; print(add(1,2))"
