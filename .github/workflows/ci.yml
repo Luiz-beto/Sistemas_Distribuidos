@@ -7,7 +7,7 @@ on:
     branches: [main, master]
 
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
 jobs:
   lint:
@@ -19,8 +19,7 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install ruff
-      - run: ruff check src/ tests/
-      - run: ruff format --check src/ tests/
+      - run: ruff check src/ tests/ && ruff format --check src/ tests/
 
   test:
     name: Test
