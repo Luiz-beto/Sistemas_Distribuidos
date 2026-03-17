@@ -1,4 +1,5 @@
 """Testes unitários do módulo calculadora."""
+
 import pytest
 import sys
 from pathlib import Path
